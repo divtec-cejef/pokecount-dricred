@@ -8,7 +8,7 @@
 "use strict";
 let compteur = 0;
 
-// Récupere l'élément avec l'id "compteur-el"
+// Récupère l'élément avec l'id "compteur-el"
 const compteurEl = document.getElementById('compteur-el');
 const sauvegardeEl = document.getElementById('sauvegarde-el');
 
@@ -26,14 +26,29 @@ function capturer() {
 }
 
 function sauvegarder() {
-    sauvegardeEl.textContent +=  `${compteur} Pokémons | `;
-    localStorage.setItem("captures", sauvegardeEl.textContent)
+    // Ajoute un élément de liste avec le compteur actuel
+    sauvegardeEl.innerHTML += `<li>${compteur}</li>`;
+
+    // Sauvegarde la liste de captures dans le localStorage
+    localStorage.setItem("captures", sauvegardeEl.innerHTML);
+
+    // Réinitialise le compteur
     compteur = 0;
     compteurEl.textContent = compteur;
 }
 
+function reset() {
+    // Supprime les données du localStorage et réinitialise l'affichage
+    localStorage.removeItem("captures");
+    sauvegardeEl.innerHTML = "Mes captures : ";
+}
+
+window.addEventListener('load', () => {
+    // Récupère l'historique des captures lors du chargement de la page
+    sauvegardeEl.innerHTML = localStorage.getItem("captures") || 'Mes captures : ';
+});
+
 document.getElementById('capturer-btn').addEventListener('click', capturer);
 document.getElementById('sauvegarder-btn').addEventListener('click', sauvegarder);
-window.addEventListener('load', () => {
-    sauvegardeEl.textContent = localStorage.getItem("captures") || "Mes captures : ";
-});
+document.getElementById('reset-btn').addEventListener('click', reset);
+
